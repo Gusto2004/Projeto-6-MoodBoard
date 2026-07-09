@@ -36,6 +36,11 @@ body {
     color 0.3s;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .app {
   width: 100%;
   max-width: 480px;
@@ -122,15 +127,35 @@ h1 {
   margin-bottom: 28px;
 }
 
+.historico-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
 .historico-titulo {
   font-size: 1.2rem;
-  margin-bottom: 16px;
+}
+
+.estatisticas {
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .historico {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.vazio {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 12px 0;
 }
 
 .registo {
