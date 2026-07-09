@@ -1,0 +1,168 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f7f7fa;
+  --bg-card: #ffffff;
+  --text: #1e1e2e;
+  --text-muted: #5c5c70;
+  --border: #e2e2ea;
+  --accent: #4361ee;
+  --perigo: #e5484d;
+}
+
+body.dark {
+  --bg: #16161e;
+  --bg-card: #1e1e2e;
+  --text: #e4e4ef;
+  --text-muted: #9c9caa;
+  --border: #33334a;
+  --accent: #7c93ff;
+  --perigo: #ff6b6f;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.app {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+
+.toggle-tema {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.subtitulo {
+  color: var(--text-muted);
+  margin: 4px 0 20px;
+}
+
+.humores {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.humor-btn {
+  flex: 1;
+  font-size: 1.8rem;
+  padding: 12px 0;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    border-color 0.15s;
+}
+
+.humor-btn:hover {
+  transform: translateY(-2px);
+}
+
+.humor-btn.selecionado {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+#nota {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--bg-card);
+  color: var(--text);
+  resize: vertical;
+  margin-bottom: 16px;
+}
+
+.guardar {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 28px;
+}
+
+.historico-titulo {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.historico {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.registo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.registo .emoji {
+  font-size: 1.6rem;
+}
+
+.registo .info {
+  flex: 1;
+}
+
+.registo .data {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.registo .texto {
+  font-size: 0.95rem;
+}
+
+.registo .apagar {
+  background: none;
+  border: none;
+  color: var(--perigo);
+  cursor: pointer;
+  font-size: 1rem;
+}

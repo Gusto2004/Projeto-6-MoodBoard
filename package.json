@@ -1,0 +1,28 @@
+{
+  "name": "projeto-6---moodboard",
+  "version": "1.0.0",
+  "description": "\"# Projeto-6-MoodBoard\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gusto2004/Projeto-6-MoodBoard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Gusto2004/Projeto-6-MoodBoard/issues"
+  },
+  "homepage": "https://github.com/Gusto2004/Projeto-6-MoodBoard#readme",
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "express": "^5.2.1"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true
+  }
+}

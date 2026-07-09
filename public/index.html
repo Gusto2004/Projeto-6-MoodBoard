@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MoodBoard — Diário de Humor</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="dark">
+    <main class="app">
+      <div class="topo">
+        <h1>MoodBoard</h1>
+        <button id="toggle-tema" class="toggle-tema" aria-label="Alternar tema">
+          ☀️
+        </button>
+      </div>
+      <p class="subtitulo">Como te sentes hoje?</p>
+
+      <div class="humores">
+        <button class="humor-btn" data-humor="feliz">😄</button>
+        <button class="humor-btn" data-humor="bem">🙂</button>
+        <button class="humor-btn" data-humor="neutro">😐</button>
+        <button class="humor-btn" data-humor="triste">😔</button>
+        <button class="humor-btn" data-humor="mal">😢</button>
+      </div>
+
+      <textarea
+        id="nota"
+        placeholder="Queres escrever alguma coisa sobre o dia? (opcional)"
+        rows="2"
+      ></textarea>
+
+      <button id="guardar" class="guardar">Guardar registo de hoje</button>
+
+      <h2 class="historico-titulo">Histórico</h2>
+      <div id="historico" class="historico"></div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
