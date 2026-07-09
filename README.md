@@ -23,26 +23,26 @@ O mesmo servidor Express serve o frontend (pasta `public`) e expõe uma API REST
 
 ## Endpoints da API
 
-| Método | Rota | Descrição |
-|---|---|---|
-| `GET` | `/registos` | Devolve todos os registos (mais recentes primeiro) |
-| `POST` | `/registos` | Cria um novo registo (body: `{ data, humor, nota }`) |
-| `DELETE` | `/registos/:id` | Apaga o registo com esse id |
+| Método   | Rota            | Descrição                                            |
+| -------- | --------------- | ---------------------------------------------------- |
+| `GET`    | `/registos`     | Devolve todos os registos (mais recentes primeiro)   |
+| `POST`   | `/registos`     | Cria um novo registo (body: `{ data, humor, nota }`) |
+| `DELETE` | `/registos/:id` | Apaga o registo com esse id                          |
 
 ## Estrutura da base de dados
 
 Tabela `registos`:
 
-| Coluna | Tipo | Descrição |
-|---|---|---|
-| `id` | INTEGER | Identificador único (auto-incremento) |
-| `data` | TEXT | Data do registo (formato `AAAA-MM-DD`) |
-| `humor` | TEXT | Humor escolhido |
-| `nota` | TEXT | Nota opcional |
+| Coluna  | Tipo    | Descrição                              |
+| ------- | ------- | -------------------------------------- |
+| `id`    | INTEGER | Identificador único (auto-incremento)  |
+| `data`  | TEXT    | Data do registo (formato `AAAA-MM-DD`) |
+| `humor` | TEXT    | Humor escolhido                        |
+| `nota`  | TEXT    | Nota opcional                          |
 
 ## Conceitos praticados
 
-- Persistência de dados com SQLite e *prepared statements* (proteção contra SQL injection)
+- Persistência de dados com SQLite e _prepared statements_ (proteção contra SQL injection)
 - Comunicação entre frontend e um backend próprio via `fetch`
 - Servir ficheiros estáticos com Express (`express.static`)
 - Manipulação de datas em JavaScript
