@@ -2,85 +2,85 @@ const express = require("express");
 const db = require("./db");
 
 const app = express();
-const PORTA = 3000;
+const PORT = 3000;
 
 app.use(express.json());
 app.use(express.static("public"));
 
-// LER todos os registos (mais recentes primeiro)
-app.get("/registos", function (pedido, resposta) {
-  const registos = db
-    .prepare("SELECT * FROM registos ORDER BY data DESC, id DESC")
+// READ all entries (most recent first)
+app.get("/entries", function (req, res) {
+  const entries = db
+    .prepare("SELECT * FROM entries ORDER BY date DESC, id DESC")
     .all();
-  resposta.json(registos);
+  res.json(entries);
 });
 
-// CRIAR ou ATUALIZAR o registo de um dia
-app.post("/registos", function (pedido, resposta) {
-  const { data, humor, nota } = pedido.body;
+// CREATE or UPDATE the entry for a day
+app.post("/entries", function (req, res) {
+  const { date, mood, note } = req.body;
 
-  if (!data || !humor) {
-    return resposta.status(400).json({ erro: "Data e humor são obrigatórios" });
+  if (!date || !mood) {
+    return res.status(400).json({ error: "Date and mood are required" });
   }
 
-  // Já existe registo para este dia?
-  const existente = db
-    .prepare("SELECT * FROM registos WHERE data = ?")
-    .get(data);
+  // Is there already an entry for this day?
+  const existing = db
+    .prepare("SELECT * FROM entries WHERE date = ?")
+    .get(date);
 
-  if (existente) {
-    // Atualiza o registo do próprio dia em vez de criar outro
+  if (existing) {
+    // Update that day's entry instead of creating another one
     db.prepare(
-      "UPDATE registos SET humor = ?, nota = ? WHERE data = ?",
-    ).run(humor, nota || "", data);
+      "UPDATE entries SET mood = ?, note = ? WHERE date = ?",
+    ).run(mood, note || "", date);
 
-    const atualizado = db
-      .prepare("SELECT * FROM registos WHERE data = ?")
-      .get(data);
-    return resposta.status(200).json(atualizado);
+    const updated = db
+      .prepare("SELECT * FROM entries WHERE date = ?")
+      .get(date);
+    return res.status(200).json(updated);
   }
 
-  // Caso contrário, cria um novo
-  const resultado = db
-    .prepare("INSERT INTO registos (data, humor, nota) VALUES (?, ?, ?)")
-    .run(data, humor, nota || "");
+  // Otherwise, create a new one
+  const result = db
+    .prepare("INSERT INTO entries (date, mood, note) VALUES (?, ?, ?)")
+    .run(date, mood, note || "");
 
-  const novoRegisto = db
-    .prepare("SELECT * FROM registos WHERE id = ?")
-    .get(resultado.lastInsertRowid);
+  const newEntry = db
+    .prepare("SELECT * FROM entries WHERE id = ?")
+    .get(result.lastInsertRowid);
 
-  resposta.status(201).json(novoRegisto);
+  res.status(201).json(newEntry);
 });
 
-// ESTATÍSTICAS
-app.get("/estatisticas", function (pedido, resposta) {
-  const total = db.prepare("SELECT COUNT(*) AS n FROM registos").get().n;
+// STATS
+app.get("/stats", function (req, res) {
+  const total = db.prepare("SELECT COUNT(*) AS n FROM entries").get().n;
 
-  const maisFrequente = db
+  const mostFrequent = db
     .prepare(
-      "SELECT humor, COUNT(*) AS n FROM registos GROUP BY humor ORDER BY n DESC LIMIT 1",
+      "SELECT mood, COUNT(*) AS n FROM entries GROUP BY mood ORDER BY n DESC LIMIT 1",
     )
     .get();
 
-  resposta.json({
+  res.json({
     total: total,
-    humorMaisFrequente: maisFrequente ? maisFrequente.humor : null,
+    mostFrequentMood: mostFrequent ? mostFrequent.mood : null,
   });
 });
 
-// APAGAR um registo
-app.delete("/registos/:id", function (pedido, resposta) {
-  const id = Number(pedido.params.id);
+// DELETE an entry
+app.delete("/entries/:id", function (req, res) {
+  const id = Number(req.params.id);
 
-  const resultado = db.prepare("DELETE FROM registos WHERE id = ?").run(id);
+  const result = db.prepare("DELETE FROM entries WHERE id = ?").run(id);
 
-  if (resultado.changes === 0) {
-    return resposta.status(404).json({ erro: "Registo não encontrado" });
+  if (result.changes === 0) {
+    return res.status(404).json({ error: "Entry not found" });
   }
 
-  resposta.status(204).send();
+  res.status(204).send();
 });
 
-app.listen(PORTA, function () {
-  console.log(`Servidor a correr em http://localhost:${PORTA}`);
+app.listen(PORT, function () {
+  console.log(`Server running at http://localhost:${PORT}`);
 });

@@ -1,73 +1,75 @@
-# MoodBoard — Diário de Humor
+# MoodBoard — Mood Diary
 
-Aplicação fullstack para registar o humor de cada dia, com uma nota opcional, e consultar o histórico ao longo do tempo. Primeiro projeto fullstack, com backend próprio e base de dados persistente.
+A full-stack app to log your mood each day, with an optional note, and review your history over time. It was my first full-stack project, with its own backend and a persistent database.
 
-## Funcionalidades
+## Features
 
-- Registar o humor do dia (5 estados, representados por emojis)
-- Adicionar uma nota opcional a cada registo
-- Apenas um registo por dia — guardar de novo no mesmo dia atualiza o registo existente
-- Estatísticas: total de registos e humor mais frequente
-- Consultar o histórico de registos, ordenado do mais recente para o mais antigo
-- Apagar registos
-- Os dados ficam guardados numa base de dados (persistem entre reinícios do servidor)
-- Modo escuro / claro com botão de alternância, que memoriza a preferência entre visitas
+- Log your mood for the day (5 states, shown as emojis)
+- Add an optional note to each entry
+- Only one entry per day: saving again on the same day updates the existing entry
+- Statistics: total number of entries and most frequent mood
+- Browse your history, ordered from newest to oldest
+- Delete entries
+- Data is stored in a database (it persists between server restarts)
+- Dark / light mode with a toggle button, remembered between visits
 
-## Tecnologias
+## Technologies
 
-- **Frontend:** HTML5, CSS3 (variáveis CSS), JavaScript (fetch, async/await)
+- **Frontend:** HTML5, CSS3 (CSS variables), JavaScript (fetch, async/await)
 - **Backend:** Node.js, Express
-- **Base de dados:** SQLite (via better-sqlite3)
+- **Database:** SQLite (via better-sqlite3)
 
-## Arquitetura
+## Architecture
 
-O mesmo servidor Express serve o frontend (pasta `public`) e expõe uma API REST que comunica com a base de dados SQLite. O frontend fala com essa API através de pedidos `fetch`.
+The same Express server serves the frontend (the `public` folder) and exposes a REST API that talks to the SQLite database. The frontend talks to that API using `fetch` requests.
 
-## Endpoints da API
+## API endpoints
 
-| Método   | Rota            | Descrição                                                     |
-| -------- | --------------- | ------------------------------------------------------------- |
-| `GET`    | `/registos`     | Devolve todos os registos (mais recentes primeiro)            |
-| `POST`   | `/registos`     | Cria um registo, ou atualiza o do próprio dia se já existir   |
-| `GET`    | `/estatisticas` | Devolve o total de registos e o humor mais frequente          |
-| `DELETE` | `/registos/:id` | Apaga o registo com esse id                                   |
+| Method   | Route          | Description                                                        |
+| -------- | -------------- | ------------------------------------------------------------------ |
+| `GET`    | `/entries`     | Returns all entries (newest first)                                 |
+| `POST`   | `/entries`     | Creates an entry, or updates the one for the same day if it exists |
+| `GET`    | `/stats`       | Returns the total number of entries and the most frequent mood     |
+| `DELETE` | `/entries/:id` | Deletes the entry with that id                                     |
 
-## Estrutura da base de dados
+The `mood` field is one of `happy`, `good`, `neutral`, `sad` or `bad`.
 
-Tabela `registos`:
+## Database structure
 
-| Coluna  | Tipo    | Descrição                              |
-| ------- | ------- | -------------------------------------- |
-| `id`    | INTEGER | Identificador único (auto-incremento)  |
-| `data`  | TEXT    | Data do registo (formato `AAAA-MM-DD`) |
-| `humor` | TEXT    | Humor escolhido                        |
-| `nota`  | TEXT    | Nota opcional                          |
+Table `entries`:
 
-## Conceitos praticados
+| Column | Type    | Description                             |
+| ------ | ------- | --------------------------------------- |
+| `id`   | INTEGER | Unique identifier (auto-increment)      |
+| `date` | TEXT    | Date of the entry (format `YYYY-MM-DD`) |
+| `mood` | TEXT    | Chosen mood                             |
+| `note` | TEXT    | Optional note                           |
 
-- Persistência de dados com SQLite e _prepared statements_ (proteção contra SQL injection)
-- Lógica de "criar ou atualizar" (evitar registos duplicados no mesmo dia)
-- Consultas de agregação em SQL (`COUNT`, `GROUP BY`) para as estatísticas
-- Comunicação entre frontend e um backend próprio via `fetch`
-- Servir ficheiros estáticos com Express (`express.static`)
-- Construção segura do DOM com `textContent` (proteção contra XSS)
-- Delegação de eventos e renderização dinâmica do DOM
+## Concepts practiced
 
-## Como correr
+- Persisting data with SQLite and _prepared statements_ (protection against SQL injection)
+- "Create or update" logic (avoiding duplicate entries on the same day)
+- SQL aggregation queries (`COUNT`, `GROUP BY`) for the statistics
+- Communication between the frontend and my own backend using `fetch`
+- Serving static files with Express (`express.static`)
+- Building the DOM safely with `textContent` (protection against XSS)
+- Event delegation and dynamic DOM rendering
+
+## How to run
 
 ```bash
 npm install
 node server.js
 ```
 
-Depois abre `http://localhost:3000` no browser.
+Then open `http://localhost:3000` in your browser.
 
-## Nota
+## Note
 
-Este projeto tem backend e base de dados, por isso não pode ser publicado no GitHub Pages (que serve apenas ficheiros estáticos). Para o publicar online seria necessário um serviço que corra Node.js, como o Render ou o Railway.
+This project has a backend and a database, so it can't be published on GitHub Pages (which only serves static files). To put it online you would need a service that runs Node.js, such as Render or Railway.
 
-## Próximos passos
+## Next steps
 
-- [ ] Histórico visual em formato de calendário, colorido por humor
-- [ ] Filtrar o histórico por mês
-- [ ] Publicar online
+- [ ] Visual history as a calendar, colored by mood
+- [ ] Filter the history by month
+- [ ] Deploy online

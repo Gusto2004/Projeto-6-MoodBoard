@@ -1,42 +1,42 @@
 <!doctype html>
-<html lang="pt">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MoodBoard — Diário de Humor</title>
+    <title>MoodBoard — Mood Diary</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body class="dark">
     <main class="app">
-      <div class="topo">
+      <div class="header">
         <h1>MoodBoard</h1>
-        <button id="toggle-tema" class="toggle-tema" aria-label="Alternar tema">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
           ☀️
         </button>
       </div>
-      <p class="subtitulo">Como te sentes hoje?</p>
+      <p class="subtitle">How are you feeling today?</p>
 
-      <div class="humores">
-        <button class="humor-btn" data-humor="feliz">😄</button>
-        <button class="humor-btn" data-humor="bem">🙂</button>
-        <button class="humor-btn" data-humor="neutro">😐</button>
-        <button class="humor-btn" data-humor="triste">😔</button>
-        <button class="humor-btn" data-humor="mal">😢</button>
+      <div class="moods">
+        <button class="mood-btn" data-mood="happy">😄</button>
+        <button class="mood-btn" data-mood="good">🙂</button>
+        <button class="mood-btn" data-mood="neutral">😐</button>
+        <button class="mood-btn" data-mood="sad">😔</button>
+        <button class="mood-btn" data-mood="bad">😢</button>
       </div>
 
       <textarea
-        id="nota"
-        placeholder="Queres escrever alguma coisa sobre o dia? (opcional)"
+        id="note"
+        placeholder="Want to write something about your day? (optional)"
         rows="2"
       ></textarea>
 
-      <button id="guardar" class="guardar">Guardar registo de hoje</button>
+      <button id="save" class="save">Save today's entry</button>
 
-      <div class="historico-cabecalho">
-        <h2 class="historico-titulo">Histórico</h2>
-        <p id="estatisticas" class="estatisticas"></p>
+      <div class="history-header">
+        <h2 class="history-title">History</h2>
+        <p id="stats" class="stats"></p>
       </div>
-      <div id="historico" class="historico"></div>
+      <div id="history" class="history"></div>
     </main>
 
     <script src="moodboard.js"></script>

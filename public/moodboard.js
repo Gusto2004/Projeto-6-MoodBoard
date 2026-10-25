@@ -1,172 +1,170 @@
-// ===== Selecionar elementos =====
-const botoesHumor = document.querySelectorAll(".humor-btn");
-const nota = document.querySelector("#nota");
-const botaoGuardar = document.querySelector("#guardar");
-const historico = document.querySelector("#historico");
-const estatisticas = document.querySelector("#estatisticas");
+// ===== Select elements =====
+const moodButtons = document.querySelectorAll(".mood-btn");
+const note = document.querySelector("#note");
+const saveButton = document.querySelector("#save");
+const historyList = document.querySelector("#history");
+const stats = document.querySelector("#stats");
 
-let humorSelecionado = null;
+let selectedMood = null;
 
-// ===== Emojis por humor =====
+// ===== Emojis by mood =====
 const emojis = {
-  feliz: "😄",
-  bem: "🙂",
-  neutro: "😐",
-  triste: "😔",
-  mal: "😢",
+  happy: "😄",
+  good: "🙂",
+  neutral: "😐",
+  sad: "😔",
+  bad: "😢",
 };
 
-// ===== Escolher um humor =====
-botoesHumor.forEach(function (botao) {
-  botao.addEventListener("click", function () {
-    botoesHumor.forEach((b) => b.classList.remove("selecionado"));
-    botao.classList.add("selecionado");
-    humorSelecionado = botao.dataset.humor;
+// ===== Pick a mood =====
+moodButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    moodButtons.forEach((b) => b.classList.remove("selected"));
+    button.classList.add("selected");
+    selectedMood = button.dataset.mood;
   });
 });
 
-// ===== Guardar registo =====
-botaoGuardar.addEventListener("click", async function () {
-  if (!humorSelecionado) {
-    alert("Escolhe primeiro um humor!");
+// ===== Save entry =====
+saveButton.addEventListener("click", async function () {
+  if (!selectedMood) {
+    alert("Pick a mood first!");
     return;
   }
 
-  const hoje = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split("T")[0];
 
-  const novoRegisto = {
-    data: hoje,
-    humor: humorSelecionado,
-    nota: nota.value.trim(),
+  const newEntry = {
+    date: today,
+    mood: selectedMood,
+    note: note.value.trim(),
   };
 
   try {
-    const resposta = await fetch("/registos", {
+    const response = await fetch("/entries", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(novoRegisto),
+      body: JSON.stringify(newEntry),
     });
 
-    if (!resposta.ok) throw new Error("Erro ao guardar");
+    if (!response.ok) throw new Error("Error saving");
 
-    nota.value = "";
-    humorSelecionado = null;
-    botoesHumor.forEach((b) => b.classList.remove("selecionado"));
+    note.value = "";
+    selectedMood = null;
+    moodButtons.forEach((b) => b.classList.remove("selected"));
 
-    carregarHistorico();
-    carregarEstatisticas();
-  } catch (erro) {
-    alert("Não foi possível guardar o registo.");
+    loadHistory();
+    loadStats();
+  } catch (error) {
+    alert("Couldn't save the entry.");
   }
 });
 
-// ===== Carregar histórico =====
-async function carregarHistorico() {
-  const resposta = await fetch("/registos");
-  const registos = await resposta.json();
+// ===== Load history =====
+async function loadHistory() {
+  const response = await fetch("/entries");
+  const entries = await response.json();
 
-  historico.innerHTML = "";
+  historyList.innerHTML = "";
 
-  if (registos.length === 0) {
-    const vazio = document.createElement("p");
-    vazio.className = "vazio";
-    vazio.textContent = "Ainda não há registos. Guarda o teu primeiro!";
-    historico.appendChild(vazio);
+  if (entries.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.textContent = "No entries yet. Save your first one!";
+    historyList.appendChild(empty);
     return;
   }
 
-  registos.forEach(function (registo) {
+  entries.forEach(function (entry) {
     const div = document.createElement("div");
-    div.className = "registo";
+    div.className = "entry";
 
     // Emoji
-    const spanEmoji = document.createElement("span");
-    spanEmoji.className = "emoji";
-    spanEmoji.textContent = emojis[registo.humor] || "❓";
+    const emojiSpan = document.createElement("span");
+    emojiSpan.className = "emoji";
+    emojiSpan.textContent = emojis[entry.mood] || "❓";
 
-    // Info (data + nota) — usa textContent para evitar XSS
-    const divInfo = document.createElement("div");
-    divInfo.className = "info";
+    // Info (date + note) — uses textContent to avoid XSS
+    const infoDiv = document.createElement("div");
+    infoDiv.className = "info";
 
-    const divData = document.createElement("div");
-    divData.className = "data";
-    divData.textContent = registo.data;
+    const dateDiv = document.createElement("div");
+    dateDiv.className = "date";
+    dateDiv.textContent = entry.date;
 
-    const divTexto = document.createElement("div");
-    divTexto.className = "texto";
-    divTexto.textContent = registo.nota || "";
+    const textDiv = document.createElement("div");
+    textDiv.className = "text";
+    textDiv.textContent = entry.note || "";
 
-    divInfo.appendChild(divData);
-    divInfo.appendChild(divTexto);
+    infoDiv.appendChild(dateDiv);
+    infoDiv.appendChild(textDiv);
 
-    // Botão apagar
-    const botaoApagar = document.createElement("button");
-    botaoApagar.className = "apagar";
-    botaoApagar.dataset.id = registo.id;
-    botaoApagar.textContent = "✕";
+    // Delete button
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "delete";
+    deleteButton.dataset.id = entry.id;
+    deleteButton.textContent = "✕";
 
-    div.appendChild(spanEmoji);
-    div.appendChild(divInfo);
-    div.appendChild(botaoApagar);
+    div.appendChild(emojiSpan);
+    div.appendChild(infoDiv);
+    div.appendChild(deleteButton);
 
-    historico.appendChild(div);
+    historyList.appendChild(div);
   });
 }
 
-// ===== Carregar estatísticas =====
-async function carregarEstatisticas() {
-  const resposta = await fetch("/estatisticas");
-  const dados = await resposta.json();
+// ===== Load stats =====
+async function loadStats() {
+  const response = await fetch("/stats");
+  const data = await response.json();
 
-  if (dados.total === 0) {
-    estatisticas.textContent = "";
+  if (data.total === 0) {
+    stats.textContent = "";
     return;
   }
 
-  const emoji = dados.humorMaisFrequente
-    ? emojis[dados.humorMaisFrequente]
-    : "";
+  const emoji = data.mostFrequentMood ? emojis[data.mostFrequentMood] : "";
 
-  const plural = dados.total === 1 ? "registo" : "registos";
-  estatisticas.textContent = `${dados.total} ${plural} · humor mais frequente: ${emoji}`;
+  const noun = data.total === 1 ? "entry" : "entries";
+  stats.textContent = `${data.total} ${noun} · most frequent mood: ${emoji}`;
 }
 
-// ===== Apagar registo (delegação de eventos) =====
-historico.addEventListener("click", async function (evento) {
-  if (evento.target.classList.contains("apagar")) {
-    const id = evento.target.dataset.id;
-    await fetch(`/registos/${id}`, { method: "DELETE" });
-    carregarHistorico();
-    carregarEstatisticas();
+// ===== Delete entry (event delegation) =====
+historyList.addEventListener("click", async function (event) {
+  if (event.target.classList.contains("delete")) {
+    const id = event.target.dataset.id;
+    await fetch(`/entries/${id}`, { method: "DELETE" });
+    loadHistory();
+    loadStats();
   }
 });
 
-// ===== Ao abrir a página =====
-carregarHistorico();
-carregarEstatisticas();
+// ===== When the page opens =====
+loadHistory();
+loadStats();
 
-// ===== TEMA (com memória) =====
-const botaoTema = document.querySelector("#toggle-tema");
+// ===== THEME (remembered between visits) =====
+const themeButton = document.querySelector("#theme-toggle");
 const body = document.body;
 
-const temaGuardado = localStorage.getItem("tema");
+const savedTheme = localStorage.getItem("theme");
 
-if (temaGuardado === "claro") {
+if (savedTheme === "light") {
   body.classList.remove("dark");
-  botaoTema.textContent = "🌙";
+  themeButton.textContent = "🌙";
 } else {
   body.classList.add("dark");
-  botaoTema.textContent = "☀️";
+  themeButton.textContent = "☀️";
 }
 
-botaoTema.addEventListener("click", function () {
+themeButton.addEventListener("click", function () {
   body.classList.toggle("dark");
 
   if (body.classList.contains("dark")) {
-    botaoTema.textContent = "☀️";
-    localStorage.setItem("tema", "escuro");
+    themeButton.textContent = "☀️";
+    localStorage.setItem("theme", "dark");
   } else {
-    botaoTema.textContent = "🌙";
-    localStorage.setItem("tema", "claro");
+    themeButton.textContent = "🌙";
+    localStorage.setItem("theme", "light");
   }
 });
